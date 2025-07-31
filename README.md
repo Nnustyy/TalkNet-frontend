@@ -1,27 +1,50 @@
-# vite-template-redux
+# Vite & HeroUI Template
 
-Uses [Vite](https://vitejs.dev/), [Vitest](https://vitest.dev/), and [React Testing Library](https://github.com/testing-library/react-testing-library) to create a modern [React](https://react.dev/) app compatible with [Create React App](https://create-react-app.dev/)
+This is a template for creating applications using Vite and HeroUI (v2).
 
-```sh
-npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
+[Try it on CodeSandbox](https://githubbox.com/frontio-ai/vite-template)
+
+## Technologies Used
+
+- [Vite](https://vitejs.dev/guide/)
+- [HeroUI](https://heroui.com)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Tailwind Variants](https://tailwind-variants.org)
+- [TypeScript](https://www.typescriptlang.org)
+- [Framer Motion](https://www.framer.com/motion)
+
+## How to Use
+
+To clone the project, run the following command:
+
+```bash
+git clone https://github.com/frontio-ai/vite-template.git
 ```
 
-## Goals
+### Install dependencies
 
-- Easy migration from Create React App or Vite
-- As beginner friendly as Create React App
-- Optimized performance compared to Create React App
-- Customizable without ejecting
+You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
 
-## Scripts
+```bash
+npm install
+```
 
-- `dev`/`start` - start dev server and open browser
-- `build` - build for production
-- `preview` - locally preview production build
-- `test` - launch test runner
+### Run the development server
 
-## Inspiration
+```bash
+npm run dev
+```
 
-- [Create React App](https://github.com/facebook/create-react-app/tree/main/packages/cra-template)
-- [Vite](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react)
-- [Vitest](https://github.com/vitest-dev/vitest/tree/main/examples/react-testing-lib)
+### Setup pnpm (optional)
+
+If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
+
+```bash
+public-hoist-pattern[]=*@heroui/*
+```
+
+After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+
+## License
+
+Licensed under the [MIT license](https://github.com/frontio-ai/vite-template/blob/main/LICENSE).
