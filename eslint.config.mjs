@@ -100,7 +100,7 @@ export default defineConfig([
       "react-hooks/exhaustive-deps": "off",
       "jsx-a11y/click-events-have-key-events": "warn",
       "jsx-a11y/interactive-supports-focus": "warn",
-      "prettier/prettier": "off",
+      "prettier/prettier": "warn",
       "no-unused-vars": "off",
       "unused-imports/no-unused-vars": "off",
       "unused-imports/no-unused-imports": "warn",
@@ -136,11 +136,11 @@ export default defineConfig([
             },
           ],
 
-          "newlines-between": "ignore",
+          "newlines-between": "always",
         },
       ],
 
-      "react/self-closing-comp": "off",
+      "react/self-closing-comp": "warn",
 
       "react/jsx-sort-props": [
         "warn",
