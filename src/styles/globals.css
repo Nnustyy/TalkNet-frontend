@@ -1,3 +1,6 @@
 @import "tailwindcss";
+main{
+  min-height: 100vh;
+}
+@config "../../tailwind.config.js" 
 
-@config "../../tailwind.config.js"
