@@ -12,10 +12,10 @@ const Header = () => {
     <div>
       <Navbar>
         <NavbarBrand>
-          <p className="fot-bold text-inherit">TalkNet</p>
+          <p className="font-bold text-inherit">TalkNet</p>
         </NavbarBrand>
         <NavbarContent justify='end'>
-          <NavbarItem className='lg:flex text-3xl cursor-pointer '> 
+          <NavbarItem className='lg:flex text-3xl cursor-pointer' onClick={() => toggleTheme()} > 
         {theme === 'light' ? <FaRegMoon/> : <FaRegSun/> }
           </NavbarItem>
           <NavbarItem>

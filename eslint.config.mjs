@@ -147,7 +147,7 @@ export default defineConfig([
         {
           callbacksLast: true,
           shorthandFirst: true,
-          noSortAlphabetically: false,
+          noSortAlphabetically: true,
           reservedFirst: true,
         },
       ],
