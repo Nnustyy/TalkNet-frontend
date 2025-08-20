@@ -1,5 +1,6 @@
 import { Tab, Tabs, Card, CardBody } from '@heroui/react';
 import React, { useState } from 'react';
+import Login from '@/features/Login';
 
 const Auth = () => {
   const [selected, setSelected] = useState('login')
@@ -11,7 +12,7 @@ const Auth = () => {
         <CardBody className='overflow-hidden'>
           <Tabs fullWidth size='md' selectedKey={selected} onSelectionChange={(key) => setSelected(key as string) }>
             <Tab key='login' title='Вход'>
-              Вход
+              <Login setSelected={setSelected}/>
             </Tab>
             <Tab key='sign up' title='Регистрация'>
               Регистрация
