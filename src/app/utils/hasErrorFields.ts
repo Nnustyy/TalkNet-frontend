@@ -1,4 +1,4 @@
-export function husErrorField (err:unknown ): err is {data:{error:string}} {
+export function hasErrorField (err:unknown ): err is {data:{error:string}} {
   return (
     typeof err === 'object' &&
     err !== null && 

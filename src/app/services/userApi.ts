@@ -3,14 +3,14 @@ import { User } from "@/types";
 
 export const userApi = api.injectEndpoints({
   endpoints: (build) => ({
-    login: build.mutation<{email:string, password:string}, {email:string, password:string}>({
+    login: build.mutation<{token:string}, {email:string, password:string}>({
       query: (userData) => ({
         url: '/login',
         method:'POST',
         body:userData
       })
     }),
-    register: build.mutation<{email:string, name:string}, {email:string, name:string}>({
+    register: build.mutation<{email:string, name:string,password:string}, {email:string, name:string, password:string}>({
       query: (userData) => ({
         url:'/register',
         method:'POST',
