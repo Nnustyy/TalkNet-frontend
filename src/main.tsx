@@ -9,12 +9,13 @@ import { Provider } from "./provider.tsx";
 import './styles/globals.css';
 import ThemeProvider from "./components/themeProvider/index.tsx";
 import Auth from "./pages/auth/index.tsx";
-import Layout from "./components/themeProvider/layout/index.tsx";
+import Layout from "./components/layout/index.tsx";
 import Posts from "./pages/posts/index.tsx";
 import CurrentPost from "./pages/current-post/index.tsx";
 import UserProfile from "./pages/user-profile/index.tsx";
 import Followers from "./pages/followers/index.tsx";
 import Following from "./pages/following/index.tsx";
+import AuthGuard from "./features/user/AuthGuard.tsx";
 
 const router = createBrowserRouter([
   {path:'/auth', element: <Auth/>},
@@ -51,7 +52,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ReduxProvider store={store}>
         {/* <Provider> */}
           <ThemeProvider>
+            <AuthGuard>
             <RouterProvider router={router} />
+            </AuthGuard>
           </ThemeProvider>
         {/* </Provider> */}
       </ReduxProvider>
