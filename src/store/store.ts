@@ -6,7 +6,7 @@ import { listenerMiddleware } from "@/middleware/auth";
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
-    user,
+    user
   },
   middleware:(getDefaultMiddleware) => {
     return getDefaultMiddleware()
