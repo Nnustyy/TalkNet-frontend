@@ -12,6 +12,7 @@ import { useCreateCommentMutation, useDeleteCommentMutation } from '@/app/servic
 import { useDeletePostMutation, useLazyGetAllPostsQuery, useLazyGetPostByIdQuery } from '@/app/services/postsApi';
 import { selectCurrent } from '@/features/user/userSlice';
 import { formatToClientDate } from '@/app/utils/formatToClientDate';
+import ErrorMessage from "../error-message";
 
 
 type Props = {
@@ -84,12 +85,13 @@ const PostCard:React.FC<Props> = ({
         <CardFooter className='gap-3'>
           <div className=" flex gap-5 items-center">
             <div>
-              <MetaInfo count={likesCount} Icon={likedByUser ? <FcLike/> : <FcLikePlaceholder />} />
+              <MetaInfo count={likesCount} Icon={likedByUser ? FcLike : FcLikePlaceholder} />
             </div>
             <Link to={`posts/:id`}>
-            <MetaInfo count={commentsCount} Icon={<FaRegComment />} />
+            <MetaInfo count={commentsCount} Icon={FaRegComment} />
             </Link>
           </div>
+          <ErrorMessage error={error} />
         </CardFooter>
       )}
     </Card>
