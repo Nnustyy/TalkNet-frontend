@@ -24,13 +24,13 @@ const Layout = () => {
     <HeroUIProvider>
       <Header/> 
       <Container>
-        <div className="flex-2 p-4">
+        <div className="flex p-4">
           <Navbar/>
         </div>
         <div className='flex-1 p-4'>
           <Outlet/>
         </div>
-        <div className='flex-2 p-2'>
+        <div className='flex p-4'>
           <div className="flex-col flex gap-5">{!user && <Profile/>}</div>
         </div>
       </Container>
