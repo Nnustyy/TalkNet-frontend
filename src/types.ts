@@ -23,8 +23,9 @@ export type Post = {
   author:User,
   authorId:string,
   likes: Like[],
-  comments:Comment,
-  createdAt:Date
+  comments:Comment[],
+  createdAt:Date,
+  likedByUser:boolean
 }
 
 export type Like = {

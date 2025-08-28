@@ -1,19 +1,17 @@
-import { useCreateCommentMutation, useDeleteCommentMutation } from '@/app/services/commentsApi';
-import { useLikePostMutation, useUnlikePostMutation } from '@/app/services/likesApi';
-import { useDeletePostMutation, useLazyGetAllPostsQuery, useLazyGetPostByIdQuery } from '@/app/services/postsApi';
-import { useCurrentQuery } from '@/app/services/userApi';
-import { BASE_URL } from '@/constants';
-import { selectCurrent } from '@/features/user/userSlice';
+import { FcLikePlaceholder, FcLike} from "react-icons/fc";
+import { FaRegTrashAlt,FaRegComment } from "react-icons/fa";
 import { Card, CardBody, CardFooter, CardHeader, Spinner } from '@heroui/react';
-import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import User from '../user';
-import { formatToClientDate } from '@/app/utils/formatToClientDate';
-import { FaRegTrashAlt } from "react-icons/fa";
-import Typography from '../typography';
-import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import MetaInfo from '../meta-info';
+import Typography from '../typography';
+import { useLikePostMutation, useUnlikePostMutation } from '@/app/services/likesApi';
+import { useCreateCommentMutation, useDeleteCommentMutation } from '@/app/services/commentsApi';
+import { useDeletePostMutation, useLazyGetAllPostsQuery, useLazyGetPostByIdQuery } from '@/app/services/postsApi';
+import { selectCurrent } from '@/features/user/userSlice';
+import { formatToClientDate } from '@/app/utils/formatToClientDate';
 
 
 type Props = {
@@ -88,6 +86,9 @@ const PostCard:React.FC<Props> = ({
             <div>
               <MetaInfo count={likesCount} Icon={likedByUser ? <FcLike/> : <FcLikePlaceholder />} />
             </div>
+            <Link to={`posts/:id`}>
+            <MetaInfo count={commentsCount} Icon={<FaRegComment />} />
+            </Link>
           </div>
         </CardFooter>
       )}
