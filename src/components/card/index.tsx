@@ -1,6 +1,7 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { FcLikePlaceholder, FcLike} from "react-icons/fc";
 import { FaRegTrashAlt,FaRegComment } from "react-icons/fa";
-import { Card, CardBody, CardFooter, CardHeader, Spinner } from '@heroui/react';
+import {  Card as HeroCard, CardBody, CardFooter, CardHeader, Spinner } from '@heroui/react';
 import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,6 +14,7 @@ import { useDeletePostMutation, useLazyGetAllPostsQuery, useLazyGetPostByIdQuery
 import { selectCurrent } from '@/features/user/userSlice';
 import { formatToClientDate } from '@/app/utils/formatToClientDate';
 import ErrorMessage from "../error-message";
+import { hasErrorField } from "@/app/utils/hasErrorFields";
 
 
 type Props = {
@@ -29,7 +31,7 @@ type Props = {
   likedByUser?: boolean
 }
 
-const PostCard:React.FC<Props> = ({
+const Card:React.FC<Props> = ({
   avatarUrl = "",
   name = "",
   content = "",
@@ -53,11 +55,74 @@ const PostCard:React.FC<Props> = ({
   const [error, setError] = useState('');
   const currentUser = useSelector(selectCurrent);
   
-  // const [comment] = useCreateCommentMutation();
 
+  const refetchPosts = async() => {
+      switch(cardFor) {
+        case 'post':
+          await triggerGetAllPosts().unwrap();
+          break;
+
+          case 'comment':
+            await triggerGetPostById(id).unwrap();
+            break;
+
+            case 'current-post':
+              await triggerGetAllPosts().unwrap();
+              break;
+
+              default: 
+              throw new Error('Неверный аргумент cardFor')
+      }
+    }
+
+  const handleLike =  async () => {
+    try {
+      {likedByUser 
+      ? await unlikePost(id).unwrap()
+      : await likePost({postId:id}).unwrap()
+      }
+      await refetchPosts()
+    } catch (error) {
+      if(hasErrorField(error)) {
+        setError(error.data.error)
+      } else {
+        setError(error as string)
+      }
+    }
+}
+
+  const handleDelete = async() => {
+    try {
+      switch (cardFor) {
+        case 'post':
+          await deletePost(id).unwrap();
+          await refetchPosts();
+        break;
+
+          case 'current-post':
+            await deletePost(id).unwrap();
+            navigate('/')
+            break;
+
+            case 'comment':
+              await deleteComment(id).unwrap();
+              await refetchPosts();
+              break;
+              
+              default: 
+              throw new Error('Неверный аргумент cardFor')
+      }
+    } catch (error) {
+            if(hasErrorField(error)) {
+        setError(error.data.error)
+      } else {
+        setError(error as string)
+      }
+    }
+  }
 
   return (
-    <Card className='mb-5'>
+    <HeroCard className='mb-5'>
       <CardHeader className='justify-between items-center bg-transparent'>
         <Link to={`users/${authorId}`}>
         <User 
@@ -68,7 +133,7 @@ const PostCard:React.FC<Props> = ({
         />
         </Link>
         {authorId === currentUser?.id && (
-          <div className='cursor-pointer'>
+          <div className='cursor-pointer' onClick={handleDelete} >
             {deleteCommentStatus.isLoading || deletePostStatus.isLoading 
             ? <Spinner/>
             : <FaRegTrashAlt />
@@ -84,18 +149,18 @@ const PostCard:React.FC<Props> = ({
       {cardFor !=='comment' && (
         <CardFooter className='gap-3'>
           <div className=" flex gap-5 items-center">
-            <div>
+            <div onClick={handleLike}>
               <MetaInfo count={likesCount} Icon={likedByUser ? FcLike : FcLikePlaceholder} />
             </div>
-            <Link to={`posts/:id`}>
+            <Link to={`posts/${id}`}>
             <MetaInfo count={commentsCount} Icon={FaRegComment} />
             </Link>
           </div>
           <ErrorMessage error={error} />
         </CardFooter>
       )}
-    </Card>
+    </HeroCard>
   );
 };
 
-export default PostCard;
+export default Card;

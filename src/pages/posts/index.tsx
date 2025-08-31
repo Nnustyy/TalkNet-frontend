@@ -1,6 +1,6 @@
 import { useGetAllPostsQuery } from '@/app/services/postsApi';
 import CreatePost from '@/components/create-post';
-import PostCard from '@/components/post';
+import Card from '@/components/card';
 import React, { useEffect } from 'react';
 
 const Posts = () => {
@@ -27,7 +27,7 @@ const Posts = () => {
               likes,
               author
             }) => 
-            <PostCard
+            <Card
                 key={id}
                 authorId={authorId}
                 cardFor='post'
@@ -38,6 +38,7 @@ const Posts = () => {
                 createdAt={createdAt}
                 avatarUrl={author.avatarUrl?? ''}
                 name={author.name ?? ''}
+                id={id}
                 />
             )
           )
