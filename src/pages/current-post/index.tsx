@@ -27,7 +27,7 @@ const CurrentPost = () => {
 
   return (
     <>
-    <GoBack/>~
+    <GoBack/>
     <div className='mb-5 w-full'>
     <Card
         key={id}
@@ -47,17 +47,17 @@ const CurrentPost = () => {
       <div className='mt-15'>
         {comments && (
           comments.length > 0 
-          ? comments.map(({id, content,createdAt,user,userId}) => 
+          ? comments.map((comment) => 
             <Card
-            key={id}
-            content={content}
-            createdAt={createdAt}
-            avatarUrl={user.avatarUrl ?? ''}
+            key={comment.id}
+            content={comment.content}
+            createdAt={comment.createdAt}
+            avatarUrl={comment.user.avatarUrl ?? ''}
             cardFor='comment'
-            name={user.name ?? ''}
+            name={comment.user.name ?? ''}
             id={id}
-            authorId={userId}
-  
+            authorId={comment.userId}
+            commentId={comment.id}
             />
           )
           : <h5 className="text-default-500 text-center">Оставьте первый комментарий!</h5>

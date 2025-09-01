@@ -3,9 +3,9 @@ import { Textarea } from '@heroui/input';
 import { Controller, useForm } from 'react-hook-form';
 import { TfiCommentsSmiley } from "react-icons/tfi";
 import { useParams } from 'react-router-dom';
+import ErrorMessage from '../error-message';
 import { useCreateCommentMutation } from '@/app/services/commentsApi';
 import {useLazyGetPostByIdQuery } from '@/app/services/postsApi';
-import ErrorMessage from '../error-message';
 
 const CreateComment = () => {
   
@@ -23,15 +23,13 @@ const CreateComment = () => {
   const onSubmit = handleSubmit(async(data) => {
     try {
 
-      if(!id) {
-        console.error('Id is undefined');
-        return;
+      if(id) {
+        await createComment({content:data.comment, postId:id})
+        await triggerGetPostById(id).unwrap()
+        setValue('comment', '');
       }
       
 
-      await createComment({content:data.comment, postId:id})
-      await triggerGetPostById(id).unwrap()
-      setValue('comment', '');
     } catch (error) {
       console.log(error)
     }
