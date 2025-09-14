@@ -2,11 +2,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RiArrowGoBackLine } from "react-icons/ri";
+import { useSelector } from 'react-redux';
+import { selectCurrent } from '@/features/user/userSlice';
 
 const GoBack = () => {
 
   const navigate = useNavigate();
-
   const handleGoBack  = () => {
     navigate(-1);
   }

@@ -4,12 +4,14 @@ import { useParams } from 'react-router-dom';
 import { IoPersonAddOutline,IoPersonRemoveOutline  } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
 import { useFollowUserMutation, useUnfollowUserMutation } from '@/app/services/followApi';
+import { useEffect } from 'react';
 import {useGetUserByIdQuery, useLazyCurrentQuery, useLazyGetUserByIdQuery } from '@/app/services/userApi';
 import { resetUser, selectCurrent } from '@/features/user/userSlice';
 import GoBack from '@/components/go-back';
 import { BASE_URL } from '@/constants';
-import ProfileInfo from '@/components/profile-info/ProfileInfo';
+import ProfileInfo from '@/components/profile-info';
 import { formatToClientDate } from '@/app/utils/formatToClientDate';
+import CountInfo from '@/components/count-info';
 
 const UserProfile = () => {
   const {id} = useParams<{id:string}>()
@@ -23,9 +25,9 @@ const UserProfile = () => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(resetUser());
-  // },[])
+useEffect(() => () => {
+  dispatch(resetUser())
+},[])
 
   if (!data) {
     return null
@@ -39,7 +41,7 @@ const UserProfile = () => {
   return (
     <>
     <GoBack/>
-    <div className='flex items-center gap-4'>
+    <div className='flex items-stretch gap-4'>
     <Card className='flex flex-col items-center text-center space-y-4 p-5 flex-2'>
       <Image
       src={`${BASE_URL}${data.avatarUrl}`}
@@ -78,7 +80,8 @@ const UserProfile = () => {
       <ProfileInfo title='Обо мне' info={data.bio} />
 
       <div className="flex gap-2">
-        
+        <CountInfo title='Подписчики' count={data.followers.length}/>
+        <CountInfo title='Подписки' count={data.following.length}/>
       </div>
     </Card>
     </div>
@@ -87,3 +90,5 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
+
+
