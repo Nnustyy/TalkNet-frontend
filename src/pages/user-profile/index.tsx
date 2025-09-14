@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { IoPersonAddOutline,IoPersonRemoveOutline  } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
-import { useFollowUserMutation, useUnfollowUserMutation } from '@/app/services/followApi';
+import { unfollowUser, useFollowUserMutation, useUnfollowUserMutation } from '@/app/services/followApi';
 import { useEffect } from 'react';
 import {useGetUserByIdQuery, useLazyCurrentQuery, useLazyGetUserByIdQuery } from '@/app/services/userApi';
 import { resetUser, selectCurrent } from '@/features/user/userSlice';
@@ -29,13 +29,30 @@ useEffect(() => () => {
   dispatch(resetUser())
 },[])
 
-  if (!data) {
-    return null
-  }
 
-  if (!currentUser) {
-    return null
+if (!data) {
+  return null
+}
+
+if (!currentUser) {
+  return null
+}
+
+const handleFollow  = async () => {
+  try {
+    if(id) {
+      data.isFollowing 
+        ? await unFollowUser(id).unwrap()
+        : await followUser({followingId:id}).unwrap()
+      
+      
+      await triggerGetUserById(id);
+      await triggerCurrentQuery();
+    }
+  } catch (error) {
+    console.log(error)
   }
+}
 
 
   return (
@@ -57,8 +74,9 @@ useEffect(() => () => {
           <Button
           color={data.isFollowing ? 'default' : 'primary'}
           variant='flat'
-          className='gap-2 '
+          className='gap-2'
           endContent={data.isFollowing ? (<IoPersonRemoveOutline />) : (<IoPersonAddOutline />)}
+          onPress={handleFollow}
           >
             {data.isFollowing ? 'Отписаться' : 'Подписаться'}
           </Button>
