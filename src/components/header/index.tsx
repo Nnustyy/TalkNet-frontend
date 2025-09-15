@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@heroui/button';
 import { ThemeContext } from '../themeProvider';
 import { logout, selectIsAuthenticated } from '@/features/user/userSlice';
-
+import { FcGlobe } from "react-icons/fc";
 
 const Header = () => {
 
@@ -27,7 +27,8 @@ const Header = () => {
     <div>
       <Navbar>
         <NavbarBrand>
-          <p className="font-bold text-inherit">TalkNet</p>
+          <p className="font-bold text-inherit mr-2">TalkNet</p>
+          <FcGlobe size={20}/>
         </NavbarBrand>
         <NavbarContent justify='end'>
           <NavbarItem className='lg:flex text-3xl cursor-pointer' onClick={() => toggleTheme()} > 
