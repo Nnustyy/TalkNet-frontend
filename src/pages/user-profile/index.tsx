@@ -12,11 +12,12 @@ import { BASE_URL } from '@/constants';
 import ProfileInfo from '@/components/profile-info';
 import { formatToClientDate } from '@/app/utils/formatToClientDate';
 import CountInfo from '@/components/count-info';
+import EditProfile from '@/components/edit-profile';
 
 const UserProfile = () => {
   const {id} = useParams<{id:string}>()
   const currentUser  = useSelector(selectCurrent);
-  const {idOpen, onOpen, onClose} = useDisclosure();
+  const {isOpen, onOpen, onClose} = useDisclosure();
   const {data} = useGetUserByIdQuery(id ?? '')
   const [followUser] = useFollowUserMutation();
   const [unFollowUser] = useUnfollowUserMutation();
@@ -84,6 +85,7 @@ const handleFollow  = async () => {
         : (
           <Button
           endContent={<FaRegEdit />}
+          onPress={() => onOpen()}
           >
             Редактировать
           </Button>
@@ -103,6 +105,7 @@ const handleFollow  = async () => {
       </div>
     </Card>
     </div>
+    <EditProfile isOpen={isOpen} user={data} onClose={onClose} />
     </>
   );
 };
