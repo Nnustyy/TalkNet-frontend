@@ -32,7 +32,7 @@ const Following = () => {
         )}
       </div>
     ) : (
-      <div className='flex items-center gap-3 '>
+      <div className='flex items-center gap-3 justify-center'>
         <h1>У вас нет подписок</h1>
         <FaRegFaceSmileWink />
       </div>

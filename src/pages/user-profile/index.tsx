@@ -2,9 +2,9 @@ import { Button, Card, Image, useDisclosure } from '@heroui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { IoPersonAddOutline,IoPersonRemoveOutline  } from "react-icons/io5";
+import { useEffect, useState } from 'react';
 import { FaRegEdit } from "react-icons/fa";
-import { unfollowUser, useFollowUserMutation, useUnfollowUserMutation } from '@/app/services/followApi';
-import { useEffect } from 'react';
+import { useFollowUserMutation, useUnfollowUserMutation } from '@/app/services/followApi';
 import {useGetUserByIdQuery, useLazyCurrentQuery, useLazyGetUserByIdQuery } from '@/app/services/userApi';
 import { resetUser, selectCurrent } from '@/features/user/userSlice';
 import GoBack from '@/components/go-back';
@@ -13,6 +13,7 @@ import ProfileInfo from '@/components/profile-info';
 import { formatToClientDate } from '@/app/utils/formatToClientDate';
 import CountInfo from '@/components/count-info';
 import EditProfile from '@/components/edit-profile';
+import { hasErrorField } from '@/app/utils/hasErrorFields';
 
 const UserProfile = () => {
   const {id} = useParams<{id:string}>()
@@ -23,6 +24,7 @@ const UserProfile = () => {
   const [unFollowUser] = useUnfollowUserMutation();
   const [triggerGetUserById] = useLazyGetUserByIdQuery();
   const [triggerCurrentQuery] = useLazyCurrentQuery();
+  const [error, setError] = useState('');
 
   const dispatch = useDispatch();
 
@@ -30,6 +32,9 @@ useEffect(() => () => {
   dispatch(resetUser())
 },[])
 
+useEffect(() => {
+  console.log(data)
+},[data])
 
 if (!data) {
   return null
@@ -51,16 +56,29 @@ const handleFollow  = async () => {
       await triggerCurrentQuery();
     }
   } catch (error) {
-    console.log(error)
+    if(hasErrorField(error)) {
+      setError(error.data.error)
+    }
   }
 }
+
+  const handleClose = async () => {
+    try {
+      await triggerCurrentQuery().unwrap();
+      onClose();
+    } catch (error) {
+      if(hasErrorField(error)) {
+        setError(error.data.error)
+      }
+    }
+  }
 
 
   return (
     <>
     <GoBack/>
     <div className='flex items-stretch gap-4'>
-    <Card className='flex flex-col items-center text-center space-y-4 p-5 flex-2'>
+    <Card className='flex flex-col items-center text-center space-y-4 p-5 flex-1'>
       <Image
       src={`${BASE_URL}${data.avatarUrl}`}
       alt={data.name}
@@ -93,11 +111,11 @@ const handleFollow  = async () => {
       }
       </div>
     </Card>
-    <Card className='flex flex-col space-y-4 p-5 flex-1'>
-      <ProfileInfo title='Почта' info={data.email} />
-      <ProfileInfo title='Местоположение' info={data.location} />
-      <ProfileInfo title='Дата рождения' info={formatToClientDate(data.dateOfBirth)} />
-      <ProfileInfo title='Обо мне' info={data.bio} />
+    <Card className='flex flex-col space-y-4 p-5 flex-2 items-center'>
+      <ProfileInfo title='Почта:' info={data.email} />
+      <ProfileInfo title='Местоположение:' info={data.location} />
+      <ProfileInfo title='Дата рождения:' info={formatToClientDate(data.dateOfBirth)} />
+      <ProfileInfo title='Обо мне:' info={data.bio} />
 
       <div className="flex gap-2">
         <CountInfo title='Подписчики' count={data.followers.length}/>
@@ -105,7 +123,7 @@ const handleFollow  = async () => {
       </div>
     </Card>
     </div>
-    <EditProfile isOpen={isOpen} user={data} onClose={onClose} />
+    <EditProfile isOpen={isOpen} user={data} onClose={handleClose} />
     </>
   );
 };

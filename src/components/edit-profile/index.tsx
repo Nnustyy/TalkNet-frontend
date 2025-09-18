@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import React, { useContext, useState } from 'react';
-import {Button, Modal, ModalBody, ModalContent, ModalHeader, Textarea } from '@heroui/react';
+import {Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea } from '@heroui/react';
 import { Controller, useForm } from 'react-hook-form';
 import { MdOutlineMailOutline } from "react-icons/md";
 import Input from '../input/input';
@@ -8,6 +8,7 @@ import ErrorMessage from '../error-message';
 import { ThemeContext } from '../themeProvider';
 import { User } from '@/types';
 import { useUpdateUserMutation } from '@/app/services/userApi';
+import { hasErrorField } from '@/app/utils/hasErrorFields';
 
 
 type Props = {
@@ -27,7 +28,7 @@ const EditProfile:React.FC<Props> = ({
   const {id} = useParams<{id:string}>();
   const [error, setError] = useState('');
   const [updateUser, {isLoading}] = useUpdateUserMutation();
-  const {selectedField, setSelectedField} = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const {handleSubmit, control} = useForm<User>({
     mode:'onChange',
@@ -42,6 +43,37 @@ const EditProfile:React.FC<Props> = ({
   })
 
 
+  const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.files !== null) {
+      setSelectedFile(e.target.files[0]);
+    }
+  }
+
+  const onSubmit  = async (data:User) => {
+    if(id) {
+      try {
+        const formData = new FormData();
+        
+        data.name && formData.append('name', data.name);
+        data.email && data.email !== user?.email && formData.append('email', data.email);
+        data.bio && formData.append('bio', data.bio);
+        data.dateOfBirth && formData.append('dateOfBirth', 
+          new Date(data.dateOfBirth).toISOString()
+        )
+        data.location && formData.append('location', data.location);
+        selectedFile && formData.append('avatar', selectedFile)
+
+        await updateUser({userData:formData, id}).unwrap();
+        onClose();
+      } catch (error) {
+        if(hasErrorField(error)) {
+          setError(error.data.error)
+        }
+      }
+    }
+  }
+
+
   return (
     <Modal
     isOpen={isOpen}
@@ -54,8 +86,11 @@ const EditProfile:React.FC<Props> = ({
         <ModalHeader className='flex flex-col gap-1'>
         Редактирование профиля
         </ModalHeader>
-        <ModalBody className='flex flex-col gap-4'>
-          <form>
+        <ModalBody>
+          <form 
+          className='flex flex-col gap-4'
+          onSubmit={handleSubmit(onSubmit)}
+          >
         <Input
         control={control}
         name='email'
@@ -69,11 +104,25 @@ const EditProfile:React.FC<Props> = ({
         label='Имя'
         type='text'
         />
-        <input 
-        type="file" 
-        placeholder='Выберете файл' 
+        {/* <input
+        type='file'
         name='avatarUrl'
-        />
+        className='border-1.5'
+        onChange={handleFileChange}
+        /> */}
+
+        <div className="relative inline-block">
+  <input 
+    type="file" 
+    id="fileInput" 
+    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+    onChange={handleFileChange}
+  />
+
+  <button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg shadow-md transition">
+    Загрузить файл
+  </button>
+</div>
         <Input
         control={control}
         name='dateOfBirth'
@@ -110,8 +159,15 @@ const EditProfile:React.FC<Props> = ({
           </Button>
         </div>
           </form>
-
         </ModalBody>
+        <ModalFooter>
+          <Button 
+          color='danger'
+          variant='light'
+          onPress={() => onClose() }>
+            Закрыть
+          </Button>
+        </ModalFooter>
       </>
       )}
       </ModalContent>
