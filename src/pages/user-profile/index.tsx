@@ -32,9 +32,6 @@ useEffect(() => () => {
   dispatch(resetUser())
 },[])
 
-useEffect(() => {
-  console.log(data)
-},[data])
 
 if (!data) {
   return null
@@ -64,8 +61,11 @@ const handleFollow  = async () => {
 
   const handleClose = async () => {
     try {
-      await triggerCurrentQuery().unwrap();
-      onClose();
+        if(id) {
+        await triggerGetUserById(id)
+        await triggerCurrentQuery()
+        onClose()
+        }
     } catch (error) {
       if(hasErrorField(error)) {
         setError(error.data.error)

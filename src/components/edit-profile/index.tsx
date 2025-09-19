@@ -104,13 +104,6 @@ const EditProfile:React.FC<Props> = ({
         label='Имя'
         type='text'
         />
-        {/* <input
-        type='file'
-        name='avatarUrl'
-        className='border-1.5'
-        onChange={handleFileChange}
-        /> */}
-
         <div className="relative inline-block">
   <input 
     type="file" 
@@ -133,7 +126,7 @@ const EditProfile:React.FC<Props> = ({
         <Controller
         control={control}
         name='bio'
-        render={(field) => (
+        render={({field}) => (
           <Textarea
           {...field}
           rows={4}
