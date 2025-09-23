@@ -53,6 +53,4 @@ npm run dev
 
 
 
-## License
 
-Licensed under the [MIT license](https://github.com/frontio-ai/vite-template/blob/main/LICENSE).
