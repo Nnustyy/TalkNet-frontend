@@ -1,1 +1,1 @@
-export const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+export const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://talknet-backend-sge2.onrender.com' : 'http://localhost:3000'
